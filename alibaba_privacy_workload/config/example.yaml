@@ -1,0 +1,8 @@
+# Example configuration
+# we use the default configuration and override only certain parameters
+
+defaults:
+  - _default
+
+profits:
+  MISC: 0.2

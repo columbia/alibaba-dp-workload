@@ -1,0 +1,50 @@
+# RDP orders
+alphas: [1.5, 1.75, 2, 2.5, 3, 4, 5, 6, 8, 16, 32, 64]
+
+# To prioritize tasks that use certain GPUs
+profits:
+  MISC: 1
+  default: 1
+  T4: 1
+  P100: 1
+  V100: 1
+  V100M32: 1
+
+# Epsilon range for CPU-based and GPU-based tasks
+epsilon_max: 1_000.0
+epsilon_min_cpu: 0.1
+epsilon_min_gpu: 0.1
+
+# Block range
+n_blocks_min: 1
+n_blocks_max: 100_000 # Acts as a scaling factor for the number of blocks
+n_blocks_cutoff: 100 # Drop tasks that request more than that
+
+# Various privacy computation hyperparameters
+avg_block_size: 1_000
+batch_size_min: 64
+batch_size_max: 4096
+epochs_min: 1
+epochs_max: 200
+
+# Fictional block to normalize the RDP curve
+normalizing_epsilon: 10
+normalizing_delta: 1e-7
+
+# To drop tasks that are too small (in normalized RDP terms)
+rdp_epsilon_min: 1e-3
+
+# To skew the workload towards certain mechanisms
+cpu_mechanisms_frequencies:
+  gaussian: 1
+  laplace: 1
+  subsampled_laplace: 1
+gpu_mechanisms_frequencies:
+  dp_ftrl: 1
+  subsampled_gaussian: 1
+
+# Workload generation parameters
+n_days: 30
+cache: True
+seed: 0
+max_number_of_tasks: -1

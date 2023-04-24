@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "alibaba_privacy_workload"
+version = "0.1.0"
+description = "Generating a privacy workload based on the Alibaba cluster trace"
+authors = ["Calliope Kostopoulou <kelkost@yahoo.gr>"]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+numpy = "^1.21"
+PyYAML = "^6.0"
+pandas = "^1.4.0"
+jupyter = "^1.0.0"
+loguru = "^0.6.0"
+omegaconf = "^2.1.1"
+hydra-core = "^1.1.1"
+modin = ">=0.14"
+ray = "^1.11.0"
+autodp = { git = "https://github.com/yuxiangw/autodp.git", tag = "v0.2.1b" }
+absl-py = "1.4.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+black = "^21.6b0"
+flake8 = "^3.9.2"
+isort = "^5.9.2"
+nb-clean = "^2.1.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+max-line-length = 79

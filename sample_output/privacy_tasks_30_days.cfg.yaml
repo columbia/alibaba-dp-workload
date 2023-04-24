@@ -1,0 +1,45 @@
+alphas:
+- 1.5
+- 1.75
+- 2
+- 2.5
+- 3
+- 4
+- 5
+- 6
+- 8
+- 16
+- 32
+- 64
+profits:
+  MISC: 1
+  default: 1
+  T4: 1
+  P100: 1
+  V100: 1
+  V100M32: 1
+epsilon_max: 1000.0
+epsilon_min_cpu: 0.1
+epsilon_min_gpu: 0.1
+n_blocks_min: 1
+n_blocks_max: 100000
+n_blocks_cutoff: 100
+avg_block_size: 1000
+batch_size_min: 64
+batch_size_max: 4096
+epochs_min: 1
+epochs_max: 200
+normalizing_epsilon: 10
+normalizing_delta: 1.0e-07
+rdp_epsilon_min: 0.001
+cpu_mechanisms_frequencies:
+  gaussian: 1
+  laplace: 1
+  subsampled_laplace: 1
+gpu_mechanisms_frequencies:
+  dp_ftrl: 1
+  subsampled_gaussian: 1
+n_days: 30
+cache: true
+seed: 0
+max_number_of_tasks: -1
