@@ -2,9 +2,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from loguru import logger
-
 from alibaba_privacy_workload.utils import get_df
+from loguru import logger
 
 
 class AlibabaTrace:
@@ -26,9 +25,11 @@ class AlibabaTrace:
                 # Cache precomputed dataframe for later
                 if cache:
                     logger.info("Saving unmodified  tasks info to cache...")
+                    path.mkdir(parents=True, exist_ok=True)
                     self.tasks_info.to_csv(
                         path.joinpath(f"tasks_info_{n_days}_days.csv"), index=False
                     )
+
         except Exception as e:
             raise ValueError(
                 f"path should be either the `data` dir of `cluster-trace-gpu-v2020` or a csv file. {e}"

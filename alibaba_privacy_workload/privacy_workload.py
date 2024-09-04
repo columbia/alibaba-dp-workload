@@ -5,10 +5,6 @@ from typing import Optional, Union
 
 import modin.pandas as pd
 import numpy as np
-from loguru import logger
-from omegaconf import DictConfig, OmegaConf
-from ray.util.multiprocessing import Pool
-
 from alibaba_privacy_workload.utils import (
     compute_gaussian_demands,
     compute_laplace_demands,
@@ -16,12 +12,15 @@ from alibaba_privacy_workload.utils import (
     map_to_range,
     sample_from_frequencies_dict,
 )
+from loguru import logger
+from omegaconf import DictConfig, OmegaConf
+from ray.util.multiprocessing import Pool
 
 
 class PrivacyWorkload:
     """
     csv-based privacy workload.
-    
+
     Reads and processes the alibaba csv files; exposes features to be used as proxies and calls a deterministic
     function for the creation of the privacy alibaba workload
     """
@@ -109,7 +108,9 @@ class PrivacyWorkload:
         ]
 
         # We normalize by a fictional block
-        epsilon, delta = float(self.cfg.normalizing_epsilon), float(self.cfg.normalizing_delta)
+        epsilon, delta = float(self.cfg.normalizing_epsilon), float(
+            self.cfg.normalizing_delta
+        )
         task["normalized_rdp_epsilons"] = []
         for alpha, rdp_epsilon in zip(task["alphas"], task["rdp_epsilons"]):
             block_epsilon = epsilon + np.log(delta) / (alpha - 1)
@@ -148,10 +149,10 @@ class PrivacyWorkload:
                 invalid_tasks[t] += 1
 
         logger.info(f"Removed invalid tasks out of {len(dp_tasks)}: {invalid_tasks}")
-        
+
         logger.info(f"Collecting results in a dataframe...")
         self.tasks = pd.DataFrame(valid_dp_tasks)
-        
+
         logger.info(self.tasks.head())
 
     def dump(
@@ -159,6 +160,7 @@ class PrivacyWorkload:
         path,
     ):
         logger.info("Saving the privacy workload...")
+        path.parent.mkdir(parents=True, exist_ok=True)
         self.tasks.to_csv(path, index=False)
 
         logger.info(f"Saved {len(self.tasks)} tasks at {path}.")
@@ -175,7 +177,7 @@ class PrivacyWorkload:
         alphas,
         avg_gpu_wrk_mem,
     ):
-        
+
         # Rough range of delta. The final demands are in RDP.
         dataset_size = n_blocks * self.cfg.avg_block_size
         delta = 1 / dataset_size
@@ -251,7 +253,7 @@ class PrivacyWorkload:
                 min_output=self.cfg.epsilon_min_gpu,
                 max_output=self.cfg.epsilon_max,
             )
-            
+
             # Batch size ~ GPU mem
             batch_size = int(
                 map_to_range(
@@ -262,7 +264,7 @@ class PrivacyWorkload:
                     max_output=min(self.cfg.batch_size_max, dataset_size // 10),
                 )
             )
-            
+
             # Epochs ~ runtime
             epochs = int(
                 map_to_range(
@@ -294,7 +296,7 @@ class PrivacyWorkload:
                 )
                 params["epochs"] = epochs
                 params["batch_size"] = batch_size
-                
+
             elif mechanism == "dp_ftrl":
                 rdp_epsilons = compute_gaussian_demands(
                     epsilon=epsilon,
